@@ -1,5 +1,5 @@
 const FALLBACK_STATE = {
-  whatsapp: "52XXXXXXXXXX",
+  whatsapp: "526481220782",
   cabins: [
     { id: "sauce", name: "Cabaña El Sauce", capacity: 4, priceNote: "Pregunta por WhatsApp", blocked: [] },
     { id: "nogal", name: "Cabaña El Nogal", capacity: 6, priceNote: "Pregunta por WhatsApp", blocked: [] }
