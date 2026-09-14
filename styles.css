@@ -117,7 +117,9 @@ section{ padding-block: clamp(48px, 8vw, 96px); }
 .tile.g4{ grid-column:span 2; grid-row:span 1; background:linear-gradient(135deg,#1f4436,#0d1a15); }
 .tile.g5{ grid-column:span 2; grid-row:span 1; background:linear-gradient(135deg,#dba62c,#f0cd6e); }
 .tile.g6{ grid-column:span 2; grid-row:span 1; background:linear-gradient(135deg,#4a3420,#8a5a34); }
-@media (max-width:720px){ .gallery{ grid-template-columns:repeat(2,1fr); grid-auto-rows:120px; } .tile.g1{ grid-column:span 2; grid-row:span 2; } .tile.g2,.tile.g3,.tile.g4,.tile.g5,.tile.g6{ grid-column:span 1; grid-row:span 1; } }
+.tile.g7{ grid-column:span 3; grid-row:span 1; background:linear-gradient(135deg,#16332a,#2d5c48 65%,#6fae8e); }
+.tile.g8{ grid-column:span 3; grid-row:span 1; background:linear-gradient(135deg,#122019,#1f4436 40%,#2d5c48 72%); }
+@media (max-width:720px){ .gallery{ grid-template-columns:repeat(2,1fr); grid-auto-rows:120px; } .tile.g1{ grid-column:span 2; grid-row:span 2; } .tile.g2,.tile.g3,.tile.g4,.tile.g5,.tile.g6,.tile.g7,.tile.g8{ grid-column:span 1; grid-row:span 1; } }
 
 .moments-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; }
 .moment-card{ border-radius:20px; padding:26px; min-height:170px; display:grid; align-content:end; gap:10px; color:#f5f1e3; position:relative; overflow:hidden; }
@@ -175,6 +177,8 @@ section{ padding-block: clamp(48px, 8vw, 96px); }
 .merch-card{ background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:14px; display:grid; gap:8px; justify-items:center; text-align:center; }
 .merch-art{ width:100%; max-width:160px; aspect-ratio:1; }
 .merch-card h3{ font-size:.95rem; }
+.merch-photo{ width:100%; border-radius:20px; border:1px solid var(--line); box-shadow:0 12px 30px rgba(0,0,0,.12); display:block; }
+.merch-caption{ text-align:center; margin-top:12px; font-size:.85rem; color:var(--ink-soft); }
 
 .llegar{ display:grid; grid-template-columns:1.1fr .9fr; gap:28px; align-items:stretch; }
 .llegar-info{ display:grid; gap:16px; align-content:start; }
