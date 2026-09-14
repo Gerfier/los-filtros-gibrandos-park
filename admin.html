@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Administrar — Los Filtros Gibrando's Park</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="logo.png">
+</head>
+<body>
+<div class="admin-wrap">
+  <h1 style="font-size:1.6rem;">Administrar contenido</h1>
+  <p style="color:var(--ink-soft); line-height:1.6;">
+    Haz clic en los días del calendario para marcarlos como <b>ocupados</b> o <b>disponibles</b>.
+    Edita precios y eventos abajo. Cuando termines, presiona <b>"Generar archivo actualizado"</b>,
+    descarga <code>data.json</code> y súbelo a tu repositorio de GitHub (reemplazando el archivo actual) —
+    en 1-2 minutos el sitio se actualiza solo.
+  </p>
+
+  <div class="admin-card">
+    <label>Número de WhatsApp (52 + 10 dígitos, sin espacios ni signos)<input id="f-whats"></label>
+  </div>
+
+  <div id="cabins-root"></div>
+
+  <div class="admin-card">
+    <label>Precio — Camping<input id="f-camping"></label>
+    <label>Precio — Día de campo<input id="f-diadecampo"></label>
+  </div>
+
+  <div class="admin-card">
+    <b>Eventos</b>
+    <div id="admin-events" style="display:grid; gap:8px;"></div>
+    <button type="button" class="btn btn-ghost btn-sm" id="add-event" style="justify-self:start;">+ Agregar evento</button>
+  </div>
+
+  <div class="admin-actions">
+    <button type="button" class="btn btn-whats" id="generate">Generar archivo actualizado</button>
+    <a class="btn btn-ghost" id="download-link" hidden>Descargar data.json</a>
+  </div>
+
+  <div class="admin-card" id="result-box" hidden>
+    <b>Listo.</b> Descarga el archivo de arriba y súbelo a GitHub (Add file → Upload files → reemplaza <code>data.json</code> → Commit), o copia el texto de abajo y pégalo editando el archivo directamente en github.com.
+    <textarea id="json-out" class="json-out" readonly></textarea>
+    <div class="admin-actions">
+      <button type="button" class="btn btn-ghost btn-sm" id="copy-json">Copiar texto</button>
+      <span id="copy-status" style="font-size:.85rem; color:var(--ink-soft);"></span>
+    </div>
+  </div>
+</div>
+
+<script src="common.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

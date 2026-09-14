@@ -1,0 +1,12 @@
+{
+  "whatsapp": "52XXXXXXXXXX",
+  "cabins": [
+    { "id": "sauce", "name": "Cabaña El Sauce", "capacity": 4, "priceNote": "Pregunta por WhatsApp", "blocked": ["2026-09-19", "2026-09-20", "2026-09-26"] },
+    { "id": "nogal", "name": "Cabaña El Nogal", "capacity": 6, "priceNote": "Pregunta por WhatsApp", "blocked": ["2026-10-03", "2026-10-04"] }
+  ],
+  "camping": { "priceNote": "Pregunta por WhatsApp (por persona)" },
+  "diaDeCampo": { "priceNote": "Pregunta por WhatsApp (entrada por persona)" },
+  "events": [
+    { "id": "e1", "date": "2026-10-04", "title": "Fin de semana familiar", "note": "Cupo limitado — aparta tu lugar por WhatsApp." }
+  ]
+}
