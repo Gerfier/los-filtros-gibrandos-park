@@ -225,8 +225,11 @@ function wireChat(){
   document.getElementById('dino-fab').onclick = () => {
     const panel = document.getElementById('chat-panel');
     panel.hidden = !panel.hidden;
-    if (!panel.hidden && !document.getElementById('chat-body').children.length){
-      addMsg('bot', '¡Hola! Soy Gibrando 🦕. Pregúntame sobre precios, cabañas, cómo llegar o eventos.');
+    if (!panel.hidden){
+      document.getElementById('chat-fab-badge').hidden = true;
+      if (!document.getElementById('chat-body').children.length){
+        addMsg('bot', '¡Hola! Soy Gibrando. Pregúntame sobre precios, cabañas, cómo llegar o eventos.');
+      }
     }
   };
   document.getElementById('chat-close').onclick = () => { document.getElementById('chat-panel').hidden = true; };

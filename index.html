@@ -267,9 +267,13 @@
   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.39 1.26 4.81L2 22l5.42-1.36a9.9 9.9 0 0 0 4.62 1.14h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2z"/></svg>
   <span>WhatsApp</span>
 </a>
-<button type="button" class="chat-fab" id="dino-fab">🦕 <span>Pregúntale a Gibrando</span></button>
+<button type="button" class="chat-fab" id="dino-fab">
+  <img class="chat-fab-logo" src="logo.png" alt="" width="26" height="26">
+  <span>Pregúntale a Gibrando</span>
+  <span class="chat-fab-badge" id="chat-fab-badge">1</span>
+</button>
 <div class="chat-panel" id="chat-panel" hidden>
-  <div class="chat-head"><span>🦕 Gibrando — guía del parque</span><button type="button" id="chat-close">✕</button></div>
+  <div class="chat-head"><span><img class="chat-head-logo" src="logo.png" alt="" width="22" height="22">Gibrando — guía del parque</span><button type="button" id="chat-close" aria-label="Cerrar chat">✕</button></div>
   <div id="chat-body"></div>
   <div class="chat-quick" id="chat-quick"></div>
   <div class="chat-input-row"><input id="chat-input" type="text" placeholder="Escribe tu pregunta..."><button type="button" id="chat-send">Enviar</button></div>
