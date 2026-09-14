@@ -150,7 +150,7 @@ function wireChat(){
     const panel = document.getElementById('chat-panel');
     panel.hidden = !panel.hidden;
     if (!panel.hidden && !document.getElementById('chat-body').children.length){
-      addMsg('bot', '¡Hola! Soy Dino 🦕. Pregúntame sobre precios, cabañas, cómo llegar o eventos.');
+      addMsg('bot', '¡Hola! Soy Gibrando 🦕. Pregúntame sobre precios, cabañas, cómo llegar o eventos.');
     }
   };
   document.getElementById('chat-close').onclick = () => { document.getElementById('chat-panel').hidden = true; };

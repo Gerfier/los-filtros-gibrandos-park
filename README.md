@@ -24,6 +24,6 @@ No se necesita ninguna cuenta especial ni contraseña — cualquiera con acceso 
 - `data.json` — la única fuente de verdad para cabañas, precios y eventos.
 - `logo.png` — logo del balneario.
 
-## Sobre el asistente "Dino"
+## Sobre el asistente "Gibrando"
 
 Responde preguntas frecuentes (precio, ubicación, qué llevar, eventos) al instante, sin necesidad de conexión a ningún servidor — no usa inteligencia artificial real todavía. Si más adelante quieren que conteste preguntas libres con IA real, se necesitaría una función de backend (por ejemplo con Netlify Functions) y una llave de API de Anthropic propia — no está incluido en esta versión para no generar costos recurrentes sin que ustedes lo decidan primero.
