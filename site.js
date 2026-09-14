@@ -1,3 +1,8 @@
+// Ver google-apps-script/SETUP.md para configurar estos dos valores.
+const BOOKING_SCRIPT_URL = "PON_AQUI_LA_URL_DE_APPS_SCRIPT";
+const BOOKING_SECRET = "CAMBIA-ESTA-PALABRA-SECRETA";
+const BOOKING_CONFIGURED = BOOKING_SCRIPT_URL.indexOf("http") === 0;
+
 const FALLBACK_STATE = {
   whatsapp: "526481220782",
   cabins: [
@@ -56,17 +61,88 @@ function refreshWhatsLinks(){
   document.getElementById('dia-whats').href = waLink(STATE.whatsapp, 'Hola, quiero información sobre el día de campo (costo de entrada).');
 }
 
+async function fetchLiveAvailability(){
+  if (!BOOKING_CONFIGURED) return;
+  try {
+    const res = await fetch(BOOKING_SCRIPT_URL + '?action=busy', { cache: 'no-store' });
+    const data = await res.json();
+    if (!data.ok) return;
+    STATE.cabins.forEach(cabin => {
+      if (data.busy[cabin.id]) cabin.blocked = data.busy[cabin.id];
+    });
+  } catch (e) {
+    // sin conexión al calendario: se sigue mostrando lo que ya traía data.json
+  }
+}
+
 function updateSelectionBar(){
   const bar = document.getElementById('selection-bar');
   if (!selection || !selection.end){ bar.hidden = true; bar.innerHTML = ''; return; }
   const cabin = STATE.cabins.find(c => c.id === selection.cabinId);
   const nights = datesBetween(selection.start, selection.end).length - 1;
-  const msg = 'Hola, vi disponibilidad para ' + cabin.name + ' del ' + fmtLarga(selection.start) + ' al ' + fmtLarga(selection.end) + ' (' + nights + ' noche' + (nights === 1 ? '' : 's') + '). ¿Podrían confirmarme disponibilidad y precio?';
+  const rangeLabel = fmtLarga(selection.start) + ' → ' + fmtLarga(selection.end);
+  const waMsg = 'Hola, vi disponibilidad para ' + cabin.name + ' del ' + fmtLarga(selection.start) + ' al ' + fmtLarga(selection.end) + ' (' + nights + ' noche' + (nights === 1 ? '' : 's') + '). ¿Podrían confirmarme disponibilidad y precio?';
   bar.hidden = false;
-  bar.innerHTML = '<span>' + esc(cabin.name) + ': ' + fmtLarga(selection.start) + ' → ' + fmtLarga(selection.end) + '</span>' +
-    '<a class="btn btn-whats btn-sm" target="_blank" rel="noopener" href="' + waLink(STATE.whatsapp, msg) + '">Solicitar por WhatsApp</a>' +
-    '<button type="button" class="btn btn-ghost btn-sm" id="clear-sel">Limpiar</button>';
+
+  if (BOOKING_CONFIGURED){
+    bar.innerHTML =
+      '<div class="book-form">' +
+      '<span>' + esc(cabin.name) + ': ' + rangeLabel + ' (' + nights + ' noche' + (nights === 1 ? '' : 's') + ')</span>' +
+      '<div class="book-form-row">' +
+      '<input id="book-name" class="book-input" type="text" placeholder="Tu nombre">' +
+      '<input id="book-phone" class="book-input" type="tel" placeholder="Tu teléfono">' +
+      '</div>' +
+      '<div class="book-form-row book-form-actions">' +
+      '<button type="button" class="btn btn-whats btn-sm" id="book-now">Reservar ahora (pagas al llegar)</button>' +
+      '<a class="btn btn-ghost btn-sm" target="_blank" rel="noopener" href="' + waLink(STATE.whatsapp, waMsg) + '">Prefiero WhatsApp</a>' +
+      '<button type="button" class="btn btn-ghost btn-sm" id="clear-sel">Limpiar</button>' +
+      '<span id="book-status" class="book-status"></span>' +
+      '</div></div>';
+    document.getElementById('book-now').onclick = () => submitBooking(cabin, waMsg);
+  } else {
+    bar.innerHTML = '<span>' + esc(cabin.name) + ': ' + rangeLabel + '</span>' +
+      '<a class="btn btn-whats btn-sm" target="_blank" rel="noopener" href="' + waLink(STATE.whatsapp, waMsg) + '">Solicitar por WhatsApp</a>' +
+      '<button type="button" class="btn btn-ghost btn-sm" id="clear-sel">Limpiar</button>';
+  }
   document.getElementById('clear-sel').onclick = () => { selection = null; renderCabins(); updateSelectionBar(); };
+}
+
+async function submitBooking(cabin, waMsg){
+  const status = document.getElementById('book-status');
+  const name = document.getElementById('book-name').value.trim();
+  const phone = document.getElementById('book-phone').value.trim();
+  if (!name || !phone){ status.textContent = 'Falta tu nombre o teléfono.'; return; }
+  const btn = document.getElementById('book-now');
+  btn.disabled = true; btn.textContent = 'Reservando...';
+  try {
+    const res = await fetch(BOOKING_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        secret: BOOKING_SECRET, cabin: cabin.id,
+        start: selection.start, end: selection.end, name, phone
+      })
+    });
+    const data = await res.json();
+    if (data.ok){
+      selection = null;
+      await fetchLiveAvailability();
+      renderCabins();
+      const bar = document.getElementById('selection-bar');
+      bar.innerHTML = '<span>¡Reservado! Nos vemos en ' + esc(cabin.name) + '. Pagas al llegar al parque.</span>' +
+        '<a class="btn btn-whats btn-sm" target="_blank" rel="noopener" href="' + waLink(STATE.whatsapp, waMsg + ' (ya la reservé desde la página)') + '">Avisar por WhatsApp también</a>';
+    } else if (data.error === 'ocupado'){
+      status.textContent = 'Alguien más acaba de reservar esas fechas — elige otras.';
+      await fetchLiveAvailability();
+      renderCabins();
+    } else {
+      status.textContent = 'No se pudo reservar (' + (data.error || 'error') + '). Intenta por WhatsApp.';
+      btn.disabled = false; btn.textContent = 'Reservar ahora (pagas al llegar)';
+    }
+  } catch (e) {
+    status.textContent = 'No se pudo conectar. Intenta por WhatsApp.';
+    btn.disabled = false; btn.textContent = 'Reservar ahora (pagas al llegar)';
+  }
 }
 
 function wireCalendar(){
@@ -175,6 +251,7 @@ async function init(){
   } catch (e) {
     STATE = FALLBACK_STATE;
   }
+  await fetchLiveAvailability();
   renderCabins();
   renderEvents();
   refreshWhatsLinks();

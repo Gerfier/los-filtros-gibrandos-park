@@ -4,8 +4,6 @@ function renderCabinsAdmin(){
   document.getElementById('cabins-root').innerHTML = STATE.cabins.map(cabin => (
     '<div class="admin-card">' +
     '<div class="cabin-head"><h3>' + esc(cabin.name) + '</h3><span class="cabin-cap">Hasta ' + cabin.capacity + ' personas</span></div>' +
-    '<div class="cal-legend"><span><span class="dot dot-free"></span>Disponible (clic para marcar ocupado)</span><span><span class="dot dot-blocked"></span>Ocupado (clic para liberar)</span></div>' +
-    '<div class="editing">' + twoMonthsHTML(cabin) + '</div>' +
     '<label>Precio<input data-cabin-price="' + cabin.id + '" value="' + esc(cabin.priceNote) + '"></label>' +
     '</div>'
   )).join('');
@@ -23,18 +21,6 @@ function renderEventsAdmin(){
   root.querySelectorAll('[data-ev-del]').forEach(b => b.onclick = () => {
     STATE.events.splice(Number(b.dataset.evDel), 1);
     renderEventsAdmin();
-  });
-}
-
-function wireCalendarToggle(){
-  document.getElementById('cabins-root').addEventListener('click', e => {
-    const btn = e.target.closest('.cal-day[data-date]');
-    if (!btn || btn.disabled) return;
-    const cabin = STATE.cabins.find(c => c.id === btn.dataset.cabin);
-    const date = btn.dataset.date;
-    const idx = cabin.blocked.indexOf(date);
-    if (idx >= 0) cabin.blocked.splice(idx, 1); else cabin.blocked.push(date);
-    renderCabinsAdmin();
   });
 }
 
@@ -84,7 +70,6 @@ async function init(){
   document.getElementById('f-diadecampo').value = STATE.diaDeCampo.priceNote;
   renderCabinsAdmin();
   renderEventsAdmin();
-  wireCalendarToggle();
   wireGenerate();
   document.getElementById('add-event').onclick = () => {
     STATE.events.push({ id: 'e' + Date.now(), date: todayIso(), title: '', note: '' });
